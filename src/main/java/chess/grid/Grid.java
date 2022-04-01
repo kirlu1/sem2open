@@ -99,6 +99,14 @@ public class Grid<E> implements IGrid<E> {
         grid = newGrid;
     }
 
+    @Override
+    public void moveElement(Coordinate initPos, Coordinate targetPos) {
+        E movedElement = get(initPos);
+        set(initPos,null);
+        set(targetPos,movedElement);
+        
+    }
+
     
         
 }
