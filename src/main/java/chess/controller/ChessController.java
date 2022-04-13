@@ -164,10 +164,6 @@ public class ChessController {
                 model.noLongerMoving();
                 resetColor();
                 }
-                if (model.selectedSquare.equals(squareCoord)) {
-                    model.noLongerMoving();
-                    resetColor();
-                }
             }
         }
     }
