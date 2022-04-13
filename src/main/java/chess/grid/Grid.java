@@ -55,7 +55,11 @@ public class Grid<E> implements IGrid<E> {
        return cols;
     }
 
-
+    public void emptyGrid() {
+        for(CoordinateItem<E> cItem : grid) {
+            cItem.item = null;
+        }
+    }
 
     @Override
     public void set(Coordinate coordinate, E value) {
@@ -70,7 +74,8 @@ public class Grid<E> implements IGrid<E> {
     @Override
     public E get(Coordinate coordinate) {
         if (!coordinateIsOnGrid(coordinate)) {
-            throw new IndexOutOfBoundsException();
+            return null;
+            //throw new IndexOutOfBoundsException();
         }
         return grid.get(coordinate.toIndex(cols)).item;
     }
@@ -107,6 +112,93 @@ public class Grid<E> implements IGrid<E> {
         
     }
 
-    
-        
+    public ArrayList<Coordinate> diagonals(Coordinate intersect) {
+        ArrayList<Coordinate> diagonalCoords = new ArrayList<Coordinate>();
+        for(Direction dir : Direction.diagonal) {
+            for (int i = 1; true; i++) {
+                Coordinate newCoord = new Coordinate(intersect.row+i*dir.vert,intersect.col+i*dir.hori);
+                if (!coordinateIsOnGrid(newCoord)) {
+                    break;
+                }
+                if (coordinateIsOnGrid(newCoord)) {
+                    diagonalCoords.add(newCoord);
+                }
+            }
+        }
+        return diagonalCoords;
+    }
+
+    public ArrayList<Coordinate> axes(Coordinate intersect) {
+        ArrayList<Coordinate> alignedCoords = new ArrayList<Coordinate>();
+        for(Direction dir : Direction.straight) {
+            for (int i = 1; true; i++) {
+                Coordinate newCoord = new Coordinate(intersect.row+i*dir.vert,intersect.col+i*dir.hori);
+                if (!coordinateIsOnGrid(newCoord)) {
+                    break;
+                }
+                if (coordinateIsOnGrid(newCoord)) {
+                    alignedCoords.add(newCoord);
+                }
+            }
+        }
+        return alignedCoords;
+    }
+
+    public boolean alignedStraightCheck(Coordinate coord1,Coordinate coord2) {
+        ArrayList<Coordinate> alignedCoords = axes(coord1);
+        return alignedCoords.contains(coord2);
+    }
+
+    public boolean alignedDiagonallyCheck(Coordinate coord1,Coordinate coord2) {
+        ArrayList<Coordinate> alignedCoords = diagonals(coord1);
+        return alignedCoords.contains(coord2);
+    }
+
+    public boolean fullAlignmentCheck(Coordinate coord1,Coordinate coord2) {
+        return (alignedStraightCheck(coord1, coord2) || alignedDiagonallyCheck(coord1, coord2));
+    }
+
+    public Direction alignmentOrientation(Coordinate origin,Coordinate pointingTo) {
+        for(Direction dir : Direction.directions) {
+            for (int i = 1; true; i++) {
+                Coordinate newCoord = new Coordinate(origin.row+i*dir.vert,origin.col+i*dir.hori);
+                if (!coordinateIsOnGrid(newCoord)) {
+                    break;
+                }
+                if (newCoord.equals(pointingTo)) {
+                    return dir;
+                }
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Coordinate> coordinatesInDirection(Coordinate origin,Direction dir) {
+        ArrayList<Coordinate> coords = new ArrayList<Coordinate>();
+        for (int i = 1; true; i++) {
+            Coordinate newCoord = new Coordinate(origin.row+i*dir.vert,origin.col+i*dir.hori);
+            if (!coordinateIsOnGrid(newCoord)) {
+                return coords;
+            }
+            coords.add(newCoord);
+        }
+    }
+
+    public ArrayList<Coordinate> coordinatesInBetween(Coordinate start,Coordinate end) {
+        ArrayList<Coordinate> betweenCoords = new ArrayList<Coordinate>();
+        for(Direction dir : Direction.directions) {
+            for (int i = 1; true; i++) {
+                Coordinate newCoord = new Coordinate(start.row+i*dir.vert,start.col+i*dir.hori);
+                if (!coordinateIsOnGrid(newCoord)) {
+                    betweenCoords.clear();
+                    break;
+                }
+                if (newCoord.equals(end)) {
+                    return betweenCoords;
+                }
+                betweenCoords.add(newCoord);
+            }
+        }
+        return null;
+    }
 }
