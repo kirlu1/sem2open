@@ -221,7 +221,7 @@ public class ChessModel implements ChessViewable, ChessControllable {
         }
     }
 
-    public boolean isSquareSafeNoKing(Coordinate square, PlayerColor attackingPlayer) {
+    public boolean isSquareSafeNotKing(Coordinate square, PlayerColor attackingPlayer) {
         int coordRow = square.row;
         int coordCol = square.col;
         // any attacking pawns?
@@ -307,7 +307,7 @@ public class ChessModel implements ChessViewable, ChessControllable {
 
     @Override
     public boolean isSquareSafe(Coordinate square,PlayerColor attackingPlayer) {
-        if (!isSquareSafeNoKing(square,attackingPlayer)) {
+        if (!isSquareSafeNotKing(square,attackingPlayer)) {
             return false;
         }
 
@@ -511,7 +511,7 @@ public class ChessModel implements ChessViewable, ChessControllable {
 
         if (farThreats.size()==1) {
             Coordinate farThreat = farThreats.get(0);
-            if (!isSquareSafe(farThreat, kingColor)) {return false;}
+            if (!isSquareSafeNotKing(farThreat, kingColor)) {return false;}
             ArrayList<Coordinate> blockingSquares = board.coordinatesInBetween(kingPos, farThreat);
 
             for(Coordinate square : blockingSquares) {
@@ -520,14 +520,9 @@ public class ChessModel implements ChessViewable, ChessControllable {
                 }
             }
         }
-
         if (!(pawnThreat==null)) {
-            if (isSquareSafe(pawnThreat,kingColor.oppositeColor())) {
-                return false;
-            }
-            if (!isSquareSafeNoKing(pawnThreat,kingColor)) {
-                return false;
-            }
+            if (!isSquareSafeNotKing(pawnThreat,kingColor)) {
+                    return false;}
         }
 
         return true;

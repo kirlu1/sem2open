@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import chess.grid.Coordinate;
 import chess.grid.CoordinateItem;
-import chess.model.GameState;
 import chess.model.Piece;
 import chess.model.PlayerColor;
 

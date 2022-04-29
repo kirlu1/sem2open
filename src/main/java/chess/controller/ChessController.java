@@ -144,6 +144,7 @@ public class ChessController {
                         }
                 } else {if (!(blocked==null)) {
                     model.legalMoves.retainAll(model.board.coordinatesInBetween(model.kingsPos.get(model.getTurnColor()),blocked));
+                    model.legalMoves.add(blocked);
             } 
             }}
             finalizeSelectClick(squareCoord);
@@ -173,6 +174,7 @@ public class ChessController {
                 model.noLongerMoving();
                 model.newTurn();
                 resetColor();
+
                 if (model.state.equals(GameState.WHITE_MATED) || model.state.equals(GameState.BLACK_MATED) || model.state.equals(GameState.STALEMATE)) {
                     view.endScreen();
                 }

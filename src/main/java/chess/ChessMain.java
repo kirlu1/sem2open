@@ -1,7 +1,6 @@
 package chess;
 
 import chess.controller.ChessController;
-import chess.model.GameState;
 import chess.view.ChessModel;
 import chess.view.ChessView;
 
